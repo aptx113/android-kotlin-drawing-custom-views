@@ -13,28 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package commons
+package com.danteyu.studio.customview
 
-import dependencyLibs.Junit
-import dependencyLibs.Kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.danteyu.studio.androidkotlindrawingcustomviews.R
 
-plugins {
-    id("kotlin")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    sourceSets {
-        getByName("main") {
-            java.srcDir("src/main/kotlin")
-        }
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
     }
-}
-
-dependencies {
-    implementation(Kotlin.stdlib)
-
-    testImplementation(Junit.JUNIT)
 }
