@@ -20,7 +20,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.danteyu.studio.androidkotlindrawingcustomviews.R
 import com.danteyu.studio.androidkotlindrawingcustomviews.databinding.FragCodelabBinding
+import com.danteyu.studio.customview.ui.codelab.dial.DialFragment
+import com.google.android.material.tabs.TabLayoutMediator
 
 /**
  * Created by George Yu in 7月. 2021.
@@ -40,5 +43,19 @@ class CodeLabFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val fragments = ArrayList<Fragment>().apply {
+            add(DialFragment())
+        }
+        val titles = ArrayList<String>().apply {
+            add(getString(R.string.dial))
+        }
+        viewDataBinding.codeLabViewPager.adapter = CodeLabPagerAdapter(fragments, requireActivity())
+        TabLayoutMediator(
+            viewDataBinding.codeLabTab,
+            viewDataBinding.codeLabViewPager
+        ) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
     }
 }
