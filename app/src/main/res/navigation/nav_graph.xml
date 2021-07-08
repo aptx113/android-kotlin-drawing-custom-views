@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/codeLabFragment">
+
+    <fragment
+        android:id="@+id/codeLabFragment"
+        android:name="com.danteyu.studio.customview.ui.codelab.CodeLabFragment"
+        android:label="CodeLab" />
+    <fragment
+        android:id="@+id/canvasFragment"
+        android:name="com.danteyu.studio.customview.ui.canvas.CanvasFragment"
+        android:label="Canvas" />
+    <fragment
+        android:id="@+id/paintFragment"
+        android:name="com.danteyu.studio.customview.ui.paint.PaintFragment"
+        android:label="Paint" />
+</navigation>
