@@ -13,6 +13,7 @@
     <string name="fan_high">3</string>
     <string name="change">Change</string>
     <string name="reset">Reset</string>
+    <string name="my_canvas">MyCanvas</string>
 
     <!-- Canvas -->
     <!-- Paint -->
