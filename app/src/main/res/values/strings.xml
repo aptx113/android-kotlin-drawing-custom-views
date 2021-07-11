@@ -3,6 +3,7 @@
     <string name="codelab">CodeLab</string>
     <string name="canvas">Canvas</string>
     <string name="paint">Paint</string>
+    <string name="mycanvas">MyCanvas</string>
 
     <!-- CodeLab -->
     <string name="dial">Dial</string>
@@ -14,6 +15,9 @@
     <string name="change">Change</string>
     <string name="reset">Reset</string>
     <string name="my_canvas">MyCanvas</string>
+    <string name="canvasContentDescription">Mini Paint is a simple line drawing app.
+   Drag your fingers to draw. Rotate the phone to clear.</string>
+
 
     <!-- Canvas -->
     <!-- Paint -->

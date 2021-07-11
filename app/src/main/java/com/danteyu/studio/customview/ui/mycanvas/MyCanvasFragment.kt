@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.danteyu.studio.customview.ui.codelab.mycanvas
+package com.danteyu.studio.customview.ui.mycanvas
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.ViewGroup
+import android.view.WindowInsets
 import androidx.fragment.app.Fragment
-import com.danteyu.studio.androidkotlindrawingcustomviews.databinding.FragMycanvasviewBinding
+import com.danteyu.studio.androidkotlindrawingcustomviews.R
 
 /**
  * Created by George Yu in 7月. 2021.
@@ -31,7 +34,16 @@ class MyCanvasFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragMycanvasviewBinding.inflate(layoutInflater, container, false).run {
-        root
+    ): View {
+        val myCanvasView = MyCanvasView(requireContext())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val controller = myCanvasView.windowInsetsController
+            controller?.hide(WindowInsets.Type.systemBars())
+        } else {
+            myCanvasView.systemUiVisibility = SYSTEM_UI_FLAG_FULLSCREEN
+        }
+        myCanvasView.contentDescription = getString(R.string.canvasContentDescription)
+        return myCanvasView
     }
 }

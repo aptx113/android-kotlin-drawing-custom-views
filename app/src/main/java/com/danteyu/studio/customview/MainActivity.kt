@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.codeLabFragment,
+                R.id.myCanvasFragment,
                 R.id.canvasFragment,
                 R.id.paintFragment
             )
