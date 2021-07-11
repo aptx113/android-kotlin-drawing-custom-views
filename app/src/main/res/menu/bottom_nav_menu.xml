@@ -4,6 +4,11 @@
         android:id="@+id/codeLabFragment"
         android:icon="@drawable/ic_codelab"
         android:title="@string/codelab"/>
+
+    <item
+        android:id="@+id/myCanvasFragment"
+        android:icon="@drawable/ic_mycanvas"
+        android:title="@string/mycanvas"/>
     <item
         android:id="@+id/canvasFragment"
         android:icon="@drawable/ic_canvas"
