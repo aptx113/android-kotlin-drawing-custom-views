@@ -16,4 +16,8 @@
         android:id="@+id/paintFragment"
         android:name="com.danteyu.studio.customview.ui.paint.PaintFragment"
         android:label="Paint" />
+    <fragment
+        android:id="@+id/myCanvasFragment"
+        android:name="com.danteyu.studio.customview.ui.mycanvas.MyCanvasFragment"
+        android:label="MyCanvas" />
 </navigation>
