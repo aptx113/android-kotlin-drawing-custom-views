@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.danteyu.studio.androidkotlindrawingcustomviews.R
 import com.danteyu.studio.androidkotlindrawingcustomviews.databinding.FragCodelabBinding
+import com.danteyu.studio.customview.ui.codelab.clipping.ClippedFragment
 import com.danteyu.studio.customview.ui.codelab.dial.DialFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -46,9 +47,11 @@ class CodeLabFragment : Fragment() {
 
         val fragments = ArrayList<Fragment>().apply {
             add(DialFragment())
+            add(ClippedFragment())
         }
         val titles = ArrayList<String>().apply {
             add(getString(R.string.dial))
+            add(getString(R.string.clipped))
         }
         viewDataBinding.codeLabViewPager.adapter = CodeLabPagerAdapter(fragments, requireActivity())
         TabLayoutMediator(
