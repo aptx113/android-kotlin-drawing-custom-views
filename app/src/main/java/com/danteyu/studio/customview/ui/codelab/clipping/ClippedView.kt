@@ -129,9 +129,59 @@ class ClippedView @JvmOverloads constructor(
     }
 
     private fun drawCircularClippingExample(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(columnOne, rowTwo)
+        // Clears any lines and curves from the path but unlike reset(),
+        // keeps the internal data structure for faster reuse.
+        path.rewind()
+        path.addCircle(
+            circleRadius,
+            clipRectBottom - circleRadius,
+            circleRadius,
+            Path.Direction.CCW
+        )
+        // The method clipPath(path, Region.Op.DIFFERENCE) was deprecated in
+        // API level 26. The recommended alternative method is
+        // clipOutPath(Path), which is currently available in
+        // API level 26 and higher.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            canvas.clipPath(path, Region.Op.DIFFERENCE)
+        } else {
+            canvas.clipOutPath(path)
+        }
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawIntersectionClippingExample(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(columnTwo, rowTwo)
+        canvas.clipRect(
+            clipRectLeft,
+            clipRectTop,
+            clipRectRight - smallRectOffset,
+            clipRectBottom - smallRectOffset
+        )
+        // The method clipRect(float, float, float, float, Region.Op
+        // .INTERSECT) was deprecated in API level 26. The recommended
+        // alternative method is clipRect(float, float, float, float), which
+        // is currently available in API level 26 and higher.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight, clipRectBottom,
+                Region.Op.INTERSECT
+            )
+        } else {
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight, clipRectBottom
+            )
+        }
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawCombinedClippingExample(canvas: Canvas) {
