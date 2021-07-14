@@ -25,6 +25,7 @@ import android.graphics.Region
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.RequiresApi
 import com.danteyu.studio.androidkotlindrawingcustomviews.R
 
 /**
@@ -32,7 +33,7 @@ import com.danteyu.studio.androidkotlindrawingcustomviews.R
  */
 private const val TEXTROW_PARAMETER = 1.5f
 
-@Suppress("UnusedPrivateMember", "TooManyFunctions", "EmptyFunctionBlock", "MagicNumber")
+@Suppress("TooManyFunctions", "MagicNumber")
 class ClippedView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -72,6 +73,7 @@ class ClippedView @JvmOverloads constructor(
     private val rowThree = rowTwo + rectInset + clipRectBottom
     private val rowFour = rowThree + rectInset + clipRectBottom
     private val textRow = rowFour + (TEXTROW_PARAMETER * clipRectBottom)
+    private val rejectRow = rowFour + rectInset + 2 * clipRectBottom
 
     private var rectF = RectF(
         rectInset,
@@ -80,6 +82,7 @@ class ClippedView @JvmOverloads constructor(
         clipRectBottom - rectInset
     )
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawBackAndUnClippedRectangle(canvas)
@@ -89,9 +92,9 @@ class ClippedView @JvmOverloads constructor(
         drawCombinedClippingExample(canvas)
         drawRoundedRectangleClippingExample(canvas)
         drawOutsideClippingExample(canvas)
-        drawSkewedTextExample(canvas)
         drawTranslatedTextExample(canvas)
-        // drawQuickRejectExample(canvas)
+        drawSkewedTextExample(canvas)
+        drawQuickRejectExample(canvas)
     }
 
     private fun drawBackAndUnClippedRectangle(canvas: Canvas) {
@@ -261,7 +264,36 @@ class ClippedView @JvmOverloads constructor(
         canvas.restore()
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun drawQuickRejectExample(canvas: Canvas) {
+        val inClipRectangle =
+            RectF(clipRectRight / 2, clipRectBottom / 2, clipRectRight * 2, clipRectBottom * 2)
+
+        val notInClipRectangle = RectF(
+            RectF(
+                clipRectRight + 1,
+                clipRectBottom + 1,
+                clipRectRight * 2,
+                clipRectBottom * 2
+            )
+        )
+
+        canvas.save()
+        canvas.translate(columnOne, rejectRow)
+        canvas.clipRect(clipRectLeft, clipRectTop, clipRectRight, clipRectBottom)
+//        if (canvas.quickReject(inClipRectangle)) {
+//            canvas.drawColor(Color.WHITE)
+//        } else {
+//            canvas.drawColor(Color.BLACK)
+//            canvas.drawRect(inClipRectangle, paint)
+//        }
+        if (canvas.quickReject(notInClipRectangle)) {
+            canvas.drawColor(Color.WHITE)
+        } else {
+            canvas.drawColor(Color.BLACK)
+            canvas.drawRect(inClipRectangle, paint)
+        }
+        canvas.restore()
     }
 
     private fun drawClippedRectangle(canvas: Canvas) {
