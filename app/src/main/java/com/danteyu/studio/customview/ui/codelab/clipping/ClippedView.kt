@@ -20,6 +20,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.graphics.Region
 import android.os.Build
 import android.util.AttributeSet
@@ -71,6 +72,13 @@ class ClippedView @JvmOverloads constructor(
     private val rowThree = rowTwo + rectInset + clipRectBottom
     private val rowFour = rowThree + rectInset + clipRectBottom
     private val textRow = rowFour + (TEXTROW_PARAMETER * clipRectBottom)
+
+    private var rectF = RectF(
+        rectInset,
+        rectInset,
+        clipRectRight - rectInset,
+        clipRectBottom - rectInset
+    )
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -185,18 +193,72 @@ class ClippedView @JvmOverloads constructor(
     }
 
     private fun drawCombinedClippingExample(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(columnOne, rowThree)
+        path.rewind()
+        path.addCircle(
+            clipRectLeft + rectInset + circleRadius,
+            clipRectTop + rectInset + circleRadius,
+            circleRadius,
+            Path.Direction.CCW
+        )
+        path.addRect(
+            clipRectRight / 2 - circleRadius,
+            clipRectTop + circleRadius + rectInset,
+            clipRectRight / 2 + circleRadius,
+            clipRectBottom - rectInset,
+            Path.Direction.CCW
+        )
+        canvas.clipPath(path)
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawRoundedRectangleClippingExample(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(columnTwo, rowThree)
+        path.rewind()
+        path.addRoundRect(rectF, clipRectRight / 4, clipRectRight / 4, Path.Direction.CCW)
+        canvas.clipPath(path)
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawOutsideClippingExample(canvas: Canvas) {
+        canvas.save()
+        canvas.translate(columnOne, rowFour)
+        canvas.clipRect(
+            2 * rectInset,
+            2 * rectInset,
+            clipRectRight - 2 * rectInset,
+            clipRectBottom - 2 * rectInset
+        )
+        drawClippedRectangle(canvas)
+        canvas.restore()
     }
 
     private fun drawTranslatedTextExample(canvas: Canvas) {
+        canvas.save()
+        paint.color = Color.GREEN
+        // Align the RIGHT side of the text with the origin.
+        paint.textAlign = Paint.Align.LEFT
+        // Apply transformation to canvas.
+        canvas.translate(columnTwo, textRow)
+        // Draw text.
+        canvas.drawText(context.getString(R.string.translated), clipRectLeft, clipRectTop, paint)
+        canvas.restore()
     }
 
     private fun drawSkewedTextExample(canvas: Canvas) {
+        canvas.save()
+        paint.color = Color.YELLOW
+        paint.textAlign = Paint.Align.RIGHT
+        // Position text.
+        canvas.translate(columnTwo, textRow)
+        // Apply skew transformation.
+        canvas.skew(0.2f, 0.3f)
+        canvas.drawText(context.getString(R.string.skewed), clipRectLeft, clipRectTop, paint)
+        canvas.restore()
     }
 
     private fun drawQuickRejectExample(canvas: Canvas) {
