@@ -21,19 +21,22 @@ import android.graphics.BitmapFactory
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
+import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
 import com.danteyu.studio.androidkotlindrawingcustomviews.R
+import kotlin.math.floor
+import kotlin.random.Random
 
 /**
  * Created by George Yu in 7月. 2021.
  */
-@Suppress("UnusedPrivateMember")
 class SpotLightImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -51,6 +54,20 @@ class SpotLightImageView @JvmOverloads constructor(
 
     private val bitmapAndroid = BitmapFactory.decodeResource(resources, R.drawable.ic_android)
     private val spotlight = BitmapFactory.decodeResource(resources, R.drawable.ic_mask)
+
+    private val shaderMatrix = Matrix()
+
+    private fun setupWinnerRect() {
+        androidBitmapX = floor(Random.nextFloat() * (width - bitmapAndroid.width))
+        androidBitmapY = floor(Random.nextFloat() * (height - bitmapAndroid.height))
+
+        winnerRect = RectF(
+            (androidBitmapX),
+            (androidBitmapY),
+            (androidBitmapX + bitmapAndroid.width),
+            (androidBitmapY + bitmapAndroid.height)
+        )
+    }
 
     init {
         val bitmap = Bitmap.createBitmap(spotlight.width, spotlight.height, Bitmap.Config.ARGB_8888)
@@ -72,5 +89,49 @@ class SpotLightImageView @JvmOverloads constructor(
 
         shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         paint.shader = shader
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        setupWinnerRect()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawColor(Color.WHITE)
+        canvas.drawBitmap(bitmapAndroid, androidBitmapX, androidBitmapY, paint)
+
+        if (!gameOver) {
+            if (shouldDrawSpotLight) {
+                canvas.drawRect(0.0f, 0.0f, width.toFloat(), height.toFloat(), paint)
+            } else {
+                canvas.drawColor(Color.BLACK)
+            }
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val motionEventX = event.x
+        val motionEventY = event.y
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                shouldDrawSpotLight = true
+                if (gameOver) {
+                    gameOver = false
+                    setupWinnerRect()
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                shouldDrawSpotLight = false
+                gameOver = winnerRect.contains(motionEventX, motionEventY)
+            }
+        }
+        shaderMatrix.setTranslate(
+            motionEventX - spotlight.width / 2.0f,
+            motionEventY - spotlight.height / 2.0f
+        )
+        shader.setLocalMatrix(shaderMatrix)
+        invalidate()
+        return true
     }
 }
