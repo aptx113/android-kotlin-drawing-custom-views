@@ -15,11 +15,14 @@
  */
 package com.danteyu.studio.customview.ui.codelab.shaders
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.danteyu.studio.androidkotlindrawingcustomviews.R
 import com.danteyu.studio.androidkotlindrawingcustomviews.databinding.FragShadersBinding
 
 /**
@@ -34,7 +37,17 @@ class ShadersFragment : Fragment() {
     ): View {
 
         val viewDataBinding = FragShadersBinding.inflate(layoutInflater, container, false)
-
+        val dialog = createInstructionsDialog()
+        dialog.show()
         return viewDataBinding.root
+    }
+
+    private fun createInstructionsDialog(): Dialog {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setIcon(R.drawable.ic_android)
+            .setTitle(R.string.instructions_title)
+            .setMessage(R.string.instructions)
+            .setPositiveButton("start") { _, _ -> }
+        return builder.create()
     }
 }
